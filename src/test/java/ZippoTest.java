@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -284,8 +285,27 @@ public class ZippoTest {
                         .log().body()               // bu kisim olmak zorunda degil. Görmek icin yazdirdik
                         .extract().path("places[0].'place name'");
         System.out.println(extractValue);
-        Assert.assertEquals(extractValue,"Beverly Hills");
+        Assert.assertEquals(extractValue, "Beverly Hills");
 
+    }
+
+    @Test
+    public void extractingJsonPathList() {
+
+        List<String> liste =
+        given()
+                .when()
+              // .get("/us/90210")
+                .get(" /tr/01000")  // bu kisim (   /tr/01000  ->  adana ve ilceleri)  seklinde olunca daha fazla place name verirdi.
+
+                .then()
+                .log().body()
+                .extract().path("places.'place name'")     // [0] dizinin bir eleman indexi verilmeyince
+                                                             // dizidei butun 'place name' leri alir
+                                                            // donus tipi String List olur
+        ;
+        System.out.println(liste);
+        Assert.assertTrue(liste.contains("Çaputçu Köyü"));
     }
 
 
