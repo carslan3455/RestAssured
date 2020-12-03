@@ -4,6 +4,7 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
 import io.restassured.specification.ResponseSpecification;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -31,9 +32,6 @@ public class ZippoTest {
                 .log(LogDetail.BODY)
                 .build();
     }
-
-
-
 
 
     @Test
@@ -271,6 +269,23 @@ public class ZippoTest {
                     .body("meta.pagination.page", equalTo(page))        // burda page karsiligi dongu devam ettikce 1,2,3....10 kadar devam
             ;
         }
+    }
+
+    @Test
+    public void extractingJsonPath() {
+
+        String extractValue =
+
+                given()
+                        .when()
+                        .get("/us/90210")       // todo http ile baslamiyorsa baseURI kullanacak
+
+                        .then()
+                        .log().body()               // bu kisim olmak zorunda degil. Görmek icin yazdirdik
+                        .extract().path("places[0].'place name'");
+        System.out.println(extractValue);
+        Assert.assertEquals(extractValue,"Beverly Hills");
+
     }
 
 
