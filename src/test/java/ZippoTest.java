@@ -7,8 +7,8 @@ import io.restassured.specification.ResponseSpecification;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import pojo.Location;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static io.restassured.RestAssured.*;
@@ -101,7 +101,7 @@ public class ZippoTest {
 
                 .then()
                 .log().all()  // sorguyu ekrana yazdiriyor
-                .statusCode(200)        // todo status islem kodunu assertion yapiyoruz. Dogr sonuc alinca farkedemeyebiliriz ama islem goruyor.
+                .statusCode(200)        // todo status islem kodunu assertion yapiyoruz. Dogru sonuc alinca farkedemeyebiliriz ama islem goruyor.
         // Hatali kod yazsak ( mesela .statusCode(201) ) bu islem icin  hata mesaji veriyor
         ;
     }
@@ -179,7 +179,7 @@ public class ZippoTest {
                 .then()
                 .log().body()
                 .body("places[0].'place name'", equalTo("Beverly Hills"))  // body den kodu almadan kontrol etmeye yardimci oluyor
-                // veri adinda arada bosluk varsa key basina '' konur. 'place name' seklinde
+                // todo veri adinda arada bosluk varsa key basina '' konur. 'place name' seklinde
                 .statusCode(200)
 
         ;
@@ -308,5 +308,20 @@ public class ZippoTest {
         Assert.assertTrue(liste.contains("Çaputçu Köyü"));
     }
 
+    @Test
+    public void extractingJsonPojo(){  // todo bu islem pojo islemi. pojo package daki classlar yardimi ile bilgileri Nesneye donusturduk.
+       Location location =
+        given()
+                .when()
+                .get("/us/90210")
+                .then()
+               // .log().body()
+                .extract().as(Location.class)
+                ;
+        System.out.println(location);
+        System.out.println(location.getCountry());
+        System.out.println(location.getPlaces());
+        System.out.println(location.getPlaces().get(0).getState());
+    }
 
 }

@@ -30,6 +30,7 @@ public class Location {
     // todo Json formatindaki isimler ile ayni olmasi gerekiyor onun icin bu sekilde tanimlama yaptik
     // todo burda setler onemli setlerde olmali
     // todo nesne donusumu icin onemli
+
     @JsonProperty("post code")
     public void setPostcode(String postcode) {
         this.postcode = postcode;
