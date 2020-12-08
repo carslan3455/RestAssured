@@ -3,6 +3,9 @@ package Task;
 import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
@@ -128,19 +131,73 @@ public class TaskSolution {
                 ;
     }
 
+    /**  Task 6
+     *  create a request to https://jsonplaceholder.typicode.com/todos/2
+     *  expect status 200
+     *  Converting Into POJO
+     *
+     */
+
     @Test
     public void task6() {
 
+        JsonPlaceHolder_Task6 task6 =
         given()
                 .when()
-                .get("https://jsonplaceholder.typicode.com/todos")
+                .get("https://jsonplaceholder.typicode.com/todos/2")
 
                 .then()
                 .log().body()
                 .statusCode(200)
-                .contentType(ContentType.JSON)
-                .body("userId[2]",equalTo(1))
-                .body("title[2]",equalTo("fugiat veniam minus"))
+                .extract().as(JsonPlaceHolder_Task6.class)
         ;
+        System.out.println(task6);
+        System.out.println(task6.getUserId());
+        System.out.println(task6.getId());
+        System.out.println(task6.getTitle());
+        System.out.println(task6.isCompleted());
+    }
+
+     /** Task 7
+      * create a request to https://jsonplaceholder.typicode.com/todos
+      * expect status 200
+      * Converting Array Into Array of POJOs
+      *
+      */
+
+     @Test
+    public void task7(){
+
+         given()
+                 .when()
+                 .get("https://jsonplaceholder.typicode.com/todos")
+
+                 .then()
+                 .log().body()
+                 .statusCode(200)
+                 .extract().path("userID")
+         ;
+
+     }
+
+    /** Task 8
+     * create a request to https://jsonplaceholder.typicode.com/todos
+     * expect status 200
+     * Converting Array Into List of POJOs
+     */
+
+    @Test
+    public void task8() {
+
+        List<JsonPlaceHolder_Task6> task8 =
+                given()
+                        .when()
+                        .get("https://jsonplaceholder.typicode.com/todos")
+
+                        .then()
+                        .log().body()
+                        .statusCode(200)
+                        .extract().path("userID");
+        System.out.println(task8);
     }
 }

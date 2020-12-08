@@ -309,7 +309,8 @@ public class ZippoTest {
     }
 
     @Test
-    public void extractingJsonPojo(){  // todo bu islem pojo islemi. pojo package daki classlar yardimi ile bilgileri Nesneye donusturduk.
+    public void extractingJsonPojo(){
+    // todo bu islem pojo islemi. pojo package daki classlar yardimi ile bilgileri Nesneye donusturduk.
        Location location =
         given()
                 .when()
