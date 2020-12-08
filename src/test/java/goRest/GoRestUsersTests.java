@@ -33,6 +33,17 @@ public class GoRestUsersTests {
         }
     }
 
+
+    /**
+     * https://gorest.co.in/public-api/users -> post
+     * Bearer 19a2009039e5c945cc19beaf601d053e37e1e8094418ea34cb8e1509a7ee196a
+     * {"name":"{{$randomFullName}}", "gender":"Male", "email":"{{$randomEmail}}", "status":"Active"}
+     * body content JSON
+     * Islemin sonucunda Id almistik
+     * genel status kontrol
+     */
+
+
     @Test
     public void createUser() {
         userId =
@@ -58,17 +69,24 @@ public class GoRestUsersTests {
         return RandomStringUtils.randomAlphabetic(8).toLowerCase()+"@gmail.com";
     }
 
+    /**
+     * Simdi Create edilen id bilgilerini listeleyip kontrol edecegiz
+     */
+
+    @Test (dependsOnMethods = "createUser")
+    public void getUserById(){
+
+        given()
+                .pathParam("userId",userId)
+                .when()
+                .get("https://gorest.co.in/public-api/users/{userId}")
+                .then()
+                .log().body()
+                .statusCode(200)
+                .body("code",equalTo(200))
+                .body("data.id",equalTo(userId))
+                ;
+    }
+
 }
 
-
-/**
- * https://gorest.co.in/public-api/users -> post
- * Bearer 19a2009039e5c945cc19beaf601d053e37e1e8094418ea34cb8e1509a7ee196a
- * <p>
- * {"name":"{{$randomFullName}}", "gender":"Male", "email":"{{$randomEmail}}", "status":"Active"}
- * <p>
- * body content JSON
- * <p>
- * Islemin sonucunda Id almistik
- * genel status kontrol
- */
