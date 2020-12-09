@@ -4,6 +4,7 @@ import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -168,16 +169,18 @@ public class TaskSolution {
      @Test
     public void task7(){
 
+         JsonPlaceHolder_Task6[] task7 =
          given()
                  .when()
                  .get("https://jsonplaceholder.typicode.com/todos")
 
                  .then()
-                 .log().body()
+                // .log().body()
                  .statusCode(200)
-                 .extract().path("userID")
+                 .extract().as(JsonPlaceHolder_Task6[].class)
          ;
 
+         System.out.println(Arrays.toString(task7));
      }
 
     /** Task 8
@@ -189,15 +192,16 @@ public class TaskSolution {
     @Test
     public void task8() {
 
-        List<JsonPlaceHolder_Task6> task8 =
-                given()
+        List<JsonPlaceHolder_Task6> task8 =Arrays.asList
+                ( given()
                         .when()
                         .get("https://jsonplaceholder.typicode.com/todos")
 
                         .then()
-                        .log().body()
+                       // .log().body()
                         .statusCode(200)
-                        .extract().path("userID");
+                        .extract().as(JsonPlaceHolder_Task6[].class))
+                ;
         System.out.println(task8);
     }
 }

@@ -1,6 +1,7 @@
 package goRest;
 
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
 
@@ -151,6 +152,33 @@ public class GoRestUsersTests {
                 .body("code",equalTo(404))
 
         ;
+    }
+
+    @Test (enabled = false)     // create - update - delete ve deletenegativ toplu calissin diye
+                                // bu testi enable = false yaptik
+    public void responseSample(){
+        Response response =     // todo Birden fazla extract ihtiyaci varsa Respons esitleniyor.
+        given()
+                .when()
+                .get("https://gorest.co.in/public-api/users")
+                .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .extract().response()
+
+                ;
+
+        // todo alinan bilgiler istenen formata gore alinir
+        User user2 = response.jsonPath().getObject("data[1]",User.class);     // 1 indexli 2.siradaki user verdi
+        List<User> userList = response.jsonPath().getList("data",User.class);  // Butun Userlari aldik
+        int total = response.jsonPath().getInt("meta.pagination.total");
+        int code = response.jsonPath().getInt("code");
+
+        System.out.println("user2= "+user2);
+        System.out.println("user size= "+ userList.size());
+        System.out.println("total= " + total);
+        System.out.println("code= " + code);
+
     }
 
 
