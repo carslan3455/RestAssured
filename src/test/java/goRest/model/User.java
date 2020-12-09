@@ -1,4 +1,4 @@
-package goRest;
+package goRest.model;
 
 public class User {
     private int  id;

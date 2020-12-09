@@ -1,5 +1,6 @@
 package goRest;
 
+import goRest.model.User;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
