@@ -18,6 +18,7 @@ public class CountryTest {
     Cookies cookies;
     private String randomGenName;
     private String randomGenCode;
+    String id;
 
     @BeforeClass        // todo Background mantiginda olusturmus olduk. Her test ten once calismasi lazim
     public void login() {
@@ -55,16 +56,24 @@ public class CountryTest {
         country.setName(randomGenName);
         country.setCode(randomGenCode);
 
-        given()
+        id = given()
                 .body(country)    // todo JSON formatında vermek yerine NESNE olarak daha kolay formatta verdik.
                 .contentType(ContentType.JSON)   // verilen bilgiyi JSON olarak gönder
                 .cookies(cookies)    // aldığımız yetki bilgilerini barındıran bilgileri tekrar göndererek yetkili işlem yaptığımızı belirttik.
 
                 .when()
-
+                .post("/school-service/api/countries")
                 .then()
+                .log().body()
+                .statusCode(201)
+                .body("name", equalTo(randomGenName))
+                .body("code", equalTo(randomGenCode))
+                .extract().jsonPath().getString("id")
+                //.extract().path("id")  // todo 2. yontem
 
-        ;
+                ;
+
+        System.out.println("id: " + id);
 
     }
 }
