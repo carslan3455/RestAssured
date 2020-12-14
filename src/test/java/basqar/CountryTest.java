@@ -27,7 +27,7 @@ public class CountryTest {
         // {"username": "daulet2030@gmail.com", "password": "TechnoStudy123@", "rememberMe": "true"}
 
         randomGenName = RandomStringUtils.randomAlphabetic(8);
-        randomGenName = RandomStringUtils.randomAlphabetic(4);
+        randomGenCode = RandomStringUtils.randomAlphabetic(4);
 
         Map<String, String> credentials = new HashMap<>();
         credentials.put("username", "daulet2030@gmail.com");
@@ -133,7 +133,6 @@ public class CountryTest {
     @Test(dependsOnMethods = "updateCountry")
     public void deleteCountryById() {
 
-
         given()
                 .cookies(cookies)
                 .pathParam("countryID", id)
@@ -143,6 +142,32 @@ public class CountryTest {
                 .statusCode(200)
                 .body(equalTo(""))      // todo silince body bos geldigi icin bu sekilde kontrol yaptik
 
-                ;
+        ;
+    }
+
+    /** ayni id yi 2.kez silmek istedigimizde body de bu mesaj geliyor
+     *
+     *  "type": "https://support.mersys.io/cloud/problem/problem-with-message",
+     *     "status": 404,
+     *     "path": "/api/countries/5fd7aacb146e3837d4905511",
+     *     "code": null,
+     *     "message": "Country not found",
+     *     "lang": null,
+     *     "uri": null
+     */
+
+    @Test(dependsOnMethods = "deleteCountryById")
+    public void deleteCountryByIdNegativTest() {
+
+        given()
+                .cookies(cookies)
+                .pathParam("countryID", id)
+                .when()
+                .delete("/school-service/api/countries/{countryID}")
+                .then()
+                .statusCode(404)
+                .body("message", equalTo("Country not found"))
+
+            ;
     }
 }
