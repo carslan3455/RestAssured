@@ -69,22 +69,22 @@ public class CountryTest {
                 .body("name", equalTo(randomGenName))
                 .body("code", equalTo(randomGenCode))
                 .extract().jsonPath().getString("id")
-                //.extract().path("id")  // todo 2. yontem
+        //.extract().path("id")  // todo 2. yontem
 
-                ;
+        ;
 
         System.out.println("id: " + id);
 
     }
 
-    @Test (dependsOnMethods = "createCountry")
+    @Test(dependsOnMethods = "createCountry")
     public void createCountryNegative() {
 
         Country country = new Country();
         country.setName(randomGenName);
         country.setCode(randomGenCode);
 
-         given()
+        given()
                 .body(country)    // todo JSON formatında vermek yerine NESNE olarak daha kolay formatta verdik.
                 .contentType(ContentType.JSON)   // verilen bilgiyi JSON olarak gönder
                 .cookies(cookies)    // aldığımız yetki bilgilerini barındıran bilgileri tekrar göndererek yetkili işlem yaptığımızı belirttik.
@@ -94,10 +94,55 @@ public class CountryTest {
                 .then()
                 .log().body()
                 .statusCode(400)
-                .body("message", equalTo("The Country with Name \""+randomGenName+"\" already exists."))
+                .body("message", equalTo("The Country with Name \"" + randomGenName + "\" already exists."))
+        ;
+    }
 
-                 ;
+    /**
+     * Update yaparken gonderilen degerler
+     * "id": "5fd7aacb146e3837d4905511",
+     * "name": "Vanuatu 788",
+     * "shortName": null,
+     * "translateName": [],
+     * "code": "CX 764"
+     */
+
+    @Test(dependsOnMethods = "createCountry")
+    public void updateCountry() {
+
+        Country country = new Country();
+        country.setId(id);
+        country.setName(RandomStringUtils.randomAlphabetic(8));
+        country.setCode(RandomStringUtils.randomAlphabetic(4));
+
+        given()
+                .cookies(cookies)
+                .body(country)
+                .contentType(ContentType.JSON)
+                .log().body()
+                .when()
+                .put("/school-service/api/countries")
+                .then()
+                .statusCode(200)
+                .body("name", equalTo(country.getName()))
+                .body("code", equalTo(country.getCode()))
+
+        ;
+    }
+
+    @Test(dependsOnMethods = "updateCountry")
+    public void deleteCountryById() {
 
 
+        given()
+                .cookies(cookies)
+                .pathParam("countryID", id)
+                .when()
+                .delete("/school-service/api/countries/{countryID}")
+                .then()
+                .statusCode(200)
+                .body(equalTo(""))      // todo silince body bos geldigi icin bu sekilde kontrol yaptik
+
+                ;
     }
 }
