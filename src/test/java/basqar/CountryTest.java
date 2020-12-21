@@ -139,7 +139,7 @@ public class CountryTest {
                 .when()
                 .delete("/school-service/api/countries/{countryID}")
                 .then()
-                .statusCode(201)
+                .statusCode(200)
                 .body(equalTo(""))      // todo silince body bos geldigi icin bu sekilde kontrol yaptik
 
         ;
